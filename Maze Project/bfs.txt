@@ -1,0 +1,50 @@
+    def BFS(self):
+        # Fill the correct path in self.path
+        # self.fullPath should contain the order of visited nodes
+
+        visitedNodes = []
+       # availableNodes = []
+        availableNodes = queue.Queue()
+        availableNodes.put(self.maze2D[0][0])
+        visitedNodes.append(self.maze2D[0][0])
+
+        while availableNodes:
+            currentNode = availableNodes.get(0)
+            visitedNodes.append(currentNode)
+            self.fullPath.append(currentNode.id)
+            if currentNode.value == 'E':
+                current = currentNode
+                self.path.append(current.id)
+                for i in range(0, len(self.fullPath)):
+                    if current.id != 0:
+                        if current.up in visitedNodes and current.up.id not in self.path:
+                            self.path.append(current.up.id)
+                            current = current.up
+                        elif current.down in visitedNodes and current.down.id not in self.path:
+                            self.path.append(current.down.id)
+                            current = current.down
+                        elif current.left in visitedNodes and current.left.id not in self.path:
+                            self.path.append(current.left.id)
+                            current = current.left
+                        elif current.right in visitedNodes and current.right.id not in self.path:
+                            self.path.append(current.right.id)
+                            current = current.right
+                self.path.reverse()
+                return self.path, self.fullPath
+
+            childNodes = []
+            for i in range(0, len(self.maze2D)):
+                for j in range(0, len(self.maze2D[i])):
+                    if self.maze2D[i][j] not in childNodes and self.maze2D[i][j] == currentNode.up:
+                        childNodes.append(self.maze2D[i][j])
+                    elif self.maze2D[i][j] not in childNodes and self.maze2D[i][j] == currentNode.down:
+                        childNodes.append(self.maze2D[i][j])
+                    elif self.maze2D[i][j] not in childNodes and self.maze2D[i][j] == currentNode.left:
+                        childNodes.append(self.maze2D[i][j])
+                    elif self.maze2D[i][j] not in childNodes and self.maze2D[i][j] == currentNode.right:
+                        childNodes.append(self.maze2D[i][j])
+            childNodes.reverse()
+            for child in childNodes:
+                if child not in visitedNodes and child.value != '#':
+                    availableNodes.put(child)
+        return self.path, self.fullPath
